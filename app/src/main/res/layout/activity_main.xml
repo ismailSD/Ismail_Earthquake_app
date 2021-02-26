@@ -1,0 +1,42 @@
+<!--  MPD XML Starter code Semester B Session 2018 2019  -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp"
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/map_frame"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"/>
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="2"
+        android:padding="10dp"
+        >
+        <TextView android:text="@string/STRENGTH"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="start"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"/>
+        <TextView android:text="@string/LOCATION"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:gravity="end"
+            />
+    </GridLayout>
+    <ListView
+        android:id="@+id/xmlListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+</LinearLayout>

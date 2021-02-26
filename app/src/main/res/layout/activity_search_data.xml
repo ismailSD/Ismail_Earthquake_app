@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SearchData">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:text="@string/search_guide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="10dp"/>
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="6"
+        android:columnCount="2"
+        android:useDefaultMargins="true">
+        <LinearLayout android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnSpan="2"
+            android:orientation="horizontal"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1">
+            <GridLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:rowCount="6"
+                android:columnCount="3"
+                android:useDefaultMargins="true">
+                <TextView
+                    android:textSize="18sp"
+                    android:text="Date From:"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"/>
+                <TextView
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:text="Date To:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"/>
+
+                <!--row 1-->
+                <EditText
+                    android:id="@+id/date_from"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:hint="Date from"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"/>
+                <EditText
+                    android:id="@+id/date_to"
+                    android:textSize="16sp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Date to"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"/>
+                <Button
+                    android:id="@+id/btn_search"
+                    android:text="Search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"/>
+            </GridLayout>
+        </LinearLayout>
+    </GridLayout>
+</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
