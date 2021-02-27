@@ -3,6 +3,7 @@ package org.me.gcu.equakestartercode;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -80,19 +81,15 @@ public class MainActivity extends AppCompatActivity{
     //3 (String) which contains all the XML data.
     private class DownloadData extends AsyncTask<String, Void, String> {
         private static final String TAG = "DownloadData";
+        ProgressDialog pd;
+
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            pd.dismiss();
             Log.d(TAG, "onPostExecute: Parameter is: "+s);
             ParseXMLData parseXMLData = new ParseXMLData();
             parseXMLData.parseXML(s);// s is the xml the android framework has sent at this point
-
-//            ArrayAdapter<Item> arrayAdapter = new ArrayAdapter<Item>(
-//                    MainActivity.this,
-//                    R.layout.list_item,
-//                    parseXMLData.getApplications()
-//            );
-//            xmlListView.setAdapter(arrayAdapter);
 
              //using my custom adapter
             feedAdapter = new ItemAdapter(MainActivity.this,
@@ -105,8 +102,11 @@ public class MainActivity extends AppCompatActivity{
             // Open fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.map_frame, map_fragment).commit();
             //:::::::::::pass items to map::::::::::::::::::
-
             xmlListView.setAdapter(feedAdapter);
+            feedAdapter.notifyDataSetChanged();
+            xmlListView.invalidateViews();
+            xmlListView.scrollBy(0, 0);
+
             //::::::::::: listen on item click::::::::::::::::::::::::::::
             xmlListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity{
                     startActivity(moreInfoIntent);
                 }
             });
+
         }
 
         @Override
@@ -129,6 +130,15 @@ public class MainActivity extends AppCompatActivity{
             }
             return rssFeed;
         }
+
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(MainActivity.this);
+            pd.setTitle("Fetch earth quake data");
+            pd.setMessage("Fetching....Please wait");
+            pd.show();
+        }
+
         private String downloadXML(String urlPath){
             StringBuilder xmlResult = new StringBuilder();
             try{
@@ -148,7 +158,6 @@ public class MainActivity extends AppCompatActivity{
                     if(charsRead <0) break;
                     if(charsRead>0){
                         xmlResult.append(String.copyValueOf(inputBuffer, 0, charsRead));
-
                     }
                 }
                 reader.close();
@@ -160,7 +169,6 @@ public class MainActivity extends AppCompatActivity{
             }catch (SecurityException e){
                 Log.e(TAG, "downloadXML: Security exception! need permission? "+e.getMessage());
             }
-
             return null;
         }
 
