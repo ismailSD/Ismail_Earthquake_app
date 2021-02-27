@@ -2,13 +2,11 @@ package org.me.gcu.equakestartercode;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,25 +22,45 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
 
     // create a reference to the listView widget from the activity main
     private ListView xmlListView;
+
     private String urlSource="http://quakes.bgs.ac.uk/feeds/MhSeismology.xml";
     private ItemAdapter feedAdapter;
+    private static final int initialDelay = 0;
+    private static final int schedulePeriod = 30;// seconds
+    private final ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(3);
+    private Future<?> future;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Log.e("MyTag","in onCreate");
         xmlListView = (ListView) findViewById(R.id.xmlListView);
-        downloadURL(urlSource);
+        startService();
+    }
+
+    private void startService(){
+        future = scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    runOnUiThread(new Runnable(){
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "in startService: starting AsyncTask");
+                            new DownloadData().execute(urlSource);
+                            Log.d(TAG, "in startService: done");
+                        }
+                    });
+                }
+            }, initialDelay,schedulePeriod,TimeUnit.SECONDS);
     }
 
     @Override
@@ -54,54 +72,103 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch (id){
-            case R.id.searchMenu:
-                Intent searchIntent = new Intent(getApplicationContext(), SearchData.class);
-                searchIntent.putExtra("items", (Serializable) feedAdapter.getItems());
-                startActivity(searchIntent);
-                break;
-            case R.id.exitAppMenu: MainActivity.this.finish();
-            break;
-            default: break;
+        if(id == R.id.searchMenu){
+            Intent searchIntent = new Intent(getApplicationContext(), SearchData.class);
+            searchIntent.putExtra("items", (Serializable) feedAdapter.getItems());
+            startActivity(searchIntent);
+
+        }else if(id == R.id.exitAppMenu){
+            // exit the application
+            MainActivity.this.finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void downloadURL(String feedUrl){
-        Log.d(TAG, "downloadURL: starting AsyncTask");
-        DownloadData downloadData = new DownloadData();
-        downloadData.execute(feedUrl);
-        Log.d(TAG, "downloadURL: done");
+    @Override
+    protected void onRestart() {
+        Log.d(TAG, "onRestart: in");
+        startService();// start background refresh
+        super.onRestart();
+        Log.d(TAG, "onRestart: out");
     }
 
-    // class that extends async task class
-    //1 (String) the type of information will be a string (pass URL to the RSS feed)
-    //2 (Void) normally used if you want to display a progress bar
-    //  (we used Void as we don't need progress bar as our information is quiet small)
-    //3 (String) which contains all the XML data.
-    private class DownloadData extends AsyncTask<String, Void, String> {
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState: in");
+        super.onRestoreInstanceState(savedInstanceState);
+        // super method will retrieve the data from the saved instance then we can access it
+        // if we need to
+        Log.d(TAG, "onRestoreInstanceState: out");
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: in");
+        super.onResume();
+        Log.d(TAG, "onResume: out");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause: in");
+        future.cancel(true);//cancel the refresh schedule
+        super.onPause();
+        Log.d(TAG, "onPause: out");
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: in");
+        // super method will take care of saving process
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: out");
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop: in");
+        future.cancel(true);// cancel the refresh schedule
+        super.onStop();
+        Log.d(TAG, "onStop: out");
+    }
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: in");
+        scheduleTaskExecutor.shutdown();// shout down the scheduler
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: out");
+    }
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+
+    public class DownloadData extends AsyncTask<String, Void, String> {
+        //1 (String) the type of information will be a string (pass URL to the RSS feed)
+        //2 (Void) normally used if you want to display a progress bar
+        //  (we used Void as we don't need progress bar as our information is quiet small)
+        //3 (String) which contains all the XML data.
+
         private static final String TAG = "DownloadData";
-        ProgressDialog pd;
+        ProgressDialog progressDialog;
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            pd.dismiss();
-            Log.d(TAG, "onPostExecute: Parameter is: "+s);
+            Log.d(TAG, "onPostExecute: in onPostExecute");
+            progressDialog.dismiss();
+
             ParseXMLData parseXMLData = new ParseXMLData();
             parseXMLData.parseXML(s);// s is the xml the android framework has sent at this point
 
-             //using my custom adapter
-            feedAdapter = new ItemAdapter(MainActivity.this,
-                    R.layout.list_record,
-                    parseXMLData.getApplications()
-            );
-            //:::::::::pass item to map::::::::::::
+            feedAdapter = new ItemAdapter(MainActivity.this, R.layout.list_record, parseXMLData.getApplications());
+
             // initial map_fragment class
             map_fragment map_fragment = new map_fragment(feedAdapter.getItems());
             // Open fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.map_frame, map_fragment).commit();
-            //:::::::::::pass items to map::::::::::::::::::
+
             xmlListView.setAdapter(feedAdapter);
             feedAdapter.notifyDataSetChanged();
             xmlListView.invalidateViews();
@@ -133,10 +200,10 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected void onPreExecute() {
-            pd = new ProgressDialog(MainActivity.this);
-            pd.setTitle("Fetch earth quake data");
-            pd.setMessage("Fetching....Please wait");
-            pd.show();
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setTitle("Fetch earth quake data");
+            progressDialog.setMessage("Fetching....Please wait");
+            progressDialog.show();
         }
 
         private String downloadXML(String urlPath){
@@ -171,7 +238,5 @@ public class MainActivity extends AppCompatActivity{
             }
             return null;
         }
-
     }
-
 }

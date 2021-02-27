@@ -88,7 +88,7 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
     }
 
 
-    private class ViewHolder{
+    private static class ViewHolder{
         private final TextView textViewStrength;
         private final TextView textViewLocation;
         public ViewHolder(View v){
