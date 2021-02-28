@@ -54,7 +54,7 @@ public class ParseXMLData {
             // and display the title of the feed.
                 switch (eventType){
                     case XmlPullParser.START_TAG:
-                    Log.d(TAG, "parse: starting tag for "+ tagName);
+                    //Log.d(TAG, "parse: starting tag for "+ tagName);
                         if("item".equalsIgnoreCase(tagName)){
                             inItem = true;
                             currentRecord = new Item();
@@ -63,7 +63,7 @@ public class ParseXMLData {
                     case XmlPullParser.TEXT: textValue = xpp.getText();
                         break;
                     case XmlPullParser.END_TAG:
-                    Log.d(TAG, "parse: ending tag for "+tagName);
+                    //Log.d(TAG, "parse: ending tag for "+tagName);
                         if (inItem){
                             if("item".equalsIgnoreCase(tagName)){
                                 // add the current entry to items and set inItem to false
@@ -92,10 +92,10 @@ public class ParseXMLData {
                 eventType = xpp.next();
             }
             // traverse the list and see if it is actually worked
-            for (Item entry : items){
-                Log.d(TAG, "parse: ***************************");
-                Log.d(TAG, entry.toString());
-            }
+//            for (Item entry : items){
+//                Log.d(TAG, "parse: ***************************");
+//                Log.d(TAG, entry.toString());
+//            }
         }catch (Exception e){
             status = false;
             Log.e(TAG, "parseXML: Error whiling parsing xml data");
