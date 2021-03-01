@@ -1,20 +1,14 @@
 package org.me.gcu.equakestartercode;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +52,8 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
 
         Item currentItem = items.get(position);
 
-        String location = currentItem.getDescription().split(";")[1].split(":")[1].toLowerCase();
-        double magnitude = Double.parseDouble(currentItem.getDescription().split(";")[4].split(":")[1]);
+        String location = currentItem.getDescription().getLocation().toLowerCase();
+        double magnitude = currentItem.getDescription().getMagnitude();
 
         viewHolder.textViewStrength.setText(String.format(Locale.UK, "%.2f",magnitude));
         viewHolder.textViewLocation.setText(location);
@@ -87,7 +81,6 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
         System.out.println("You clicked on item:::::::::::::::::::::::::");
     }
 
-
     private static class ViewHolder{
         private final TextView textViewStrength;
         private final TextView textViewLocation;
@@ -97,7 +90,6 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
         }
 
     }
-
 
     public List<Item> getItems() {
         return items;

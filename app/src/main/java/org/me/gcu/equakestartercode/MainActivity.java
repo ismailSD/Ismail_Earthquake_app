@@ -3,8 +3,6 @@ package org.me.gcu.equakestartercode;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -39,9 +37,8 @@ public class MainActivity extends AppCompatActivity{
 
     private String urlSource="http://quakes.bgs.ac.uk/feeds/MhSeismology.xml";
     private ItemAdapter feedAdapter;
-    private ArrayList<Item> items;
     private static final int initialDelay = 0;
-    private static final int schedulePeriod = 5;// seconds
+    private static final int schedulePeriod = 15;// seconds
     private final ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(3);
     private Future<?> future;
     map_fragment map_fragment;
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.items = new ArrayList<>();
         xmlListView = (ListView) findViewById(R.id.xmlListView);
         startService();
     }
@@ -195,7 +191,7 @@ public class MainActivity extends AppCompatActivity{
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Item selectedItem = feedAdapter.getItems().get(position);
                     Intent moreInfoIntent = new Intent(getApplicationContext(), MoreInfo.class);
-                    moreInfoIntent.putExtra("item", selectedItem.getDescription());
+                    moreInfoIntent.putExtra("item", selectedItem);
                     startActivity(moreInfoIntent);
                 }
             });

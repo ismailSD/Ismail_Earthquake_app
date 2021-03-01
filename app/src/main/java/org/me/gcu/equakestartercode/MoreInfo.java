@@ -1,14 +1,16 @@
 package org.me.gcu.equakestartercode;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Locale;
 
 public class MoreInfo extends AppCompatActivity {
     private TextView info_location;
@@ -17,6 +19,7 @@ public class MoreInfo extends AppCompatActivity {
     private TextView info_longitude;
     private TextView info_magnitude;
     private TextView info_depth;
+    private Item item;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,35 +38,48 @@ public class MoreInfo extends AppCompatActivity {
 
         Intent moreInfoIntent = getIntent();
 
-        String data = moreInfoIntent.getStringExtra("item");
+        this.item = (Item) moreInfoIntent.getSerializableExtra("item");
 
-        String location = data.split(";")[1].split(":")[1].toLowerCase();
-        String date = data.split(";")[0].split(":")[1];
-        String latitude = data.split(";")[2].split(":")[1].split(",")[0];
-        String longitude = data.split(";")[2].split(":")[1].split(",")[1];
-        String depth = data.split(";")[3].split(":")[1];
-        String magnitude = data.split(";")[4].split(":")[1];
-
-        info_location.setText(location);
-        info_date.setText(date);
-        info_latitude.setText(latitude);
-        info_longitude.setText(longitude);
-        info_depth.setText(depth);
-        info_magnitude.setText(magnitude);
-
-        //:::::::::pass item to map::::::::::::
-        // initial map_fragment class
-        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-
-        MapsFragmentZoomed map_fragment = new MapsFragmentZoomed(latLng, location, Double.parseDouble(magnitude));
+        info_location.setText(item.getDescription().getLocation());
+        info_date.setText(item.getDescription().getDateTime());
+        info_latitude.setText(String.format(Locale.UK, "%.3f",item.getDescription().getLatitude()));
+        info_longitude.setText(String.format(Locale.UK, "%.3f",item.getDescription().getLongitude()));
+        info_depth.setText(String.format(Locale.UK, "%.3f",item.getDescription().getDepth()));
+        info_magnitude.setText(String.format(Locale.UK,"%.3f",item.getDescription().getMagnitude()));
+        MapsFragmentZoomed map_fragment = new MapsFragmentZoomed(
+                item.getDescription().getLatitude(),
+                item.getDescription().getLongitude(),
+                item.getDescription().getLocation(),
+                item.getDescription().getMagnitude());
         // Open fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.map_frame_zoomed, map_fragment).commit();
-        //:::::::::::pass items to map::::::::::::::::::
     }
+
     // allows us to navigate back to previous activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home) finish();
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
+
 }

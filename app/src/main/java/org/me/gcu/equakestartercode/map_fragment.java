@@ -22,13 +22,11 @@ import java.util.List;
 
 public class map_fragment extends Fragment{
     // creating array list for adding all our locations.
-    private  static ArrayList<LatLng> locationArrayList;
     private  static  List<Item> items;
     private GoogleMap mMap;
     public map_fragment(){}
     public map_fragment(List<Item> items){
-        this.items = items;
-        locationArrayList = new ArrayList<>();
+        map_fragment.items = items;
     }
 
     @Override
@@ -38,16 +36,6 @@ public class map_fragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        if(items!=null){
-            for(Item feed : items){
-                String latLong = feed.getDescription().split(";")[2].split(":")[1];
-
-                double latitude = Double.parseDouble(latLong.split(",")[0].trim());
-                double longitude = Double.parseDouble(latLong.split(",")[1].trim());
-                this.locationArrayList.add(new LatLng(latitude, longitude));
-            }
-        }
 
         // initialize view
         View view = inflater.inflate(R.layout.fragment_map_fragment, container, false);
@@ -64,12 +52,11 @@ public class map_fragment extends Fragment{
                 if(items !=null){
                     for(Item feed : items){
 
-                        String latLong = feed.getDescription().split(";")[2].split(":")[1];
-                        String location = feed.getDescription().split(";")[1].split(":")[1];
-                        double magnitude = Double.parseDouble(feed.getDescription().split(";")[4].split(":")[1]);
+                        String location = feed.getDescription().getLocation();
+                        double magnitude = feed.getDescription().getMagnitude();
 
-                        double latitude = Double.parseDouble(latLong.split(",")[0].trim());
-                        double longitude = Double.parseDouble(latLong.split(",")[1].trim());
+                        double latitude = feed.getDescription().getLatitude();
+                        double longitude = feed.getDescription().getLongitude();
                         LatLng latLng = new LatLng(latitude, longitude);
 
                         MarkerOptions markerOptions = new MarkerOptions();
@@ -99,31 +86,9 @@ public class map_fragment extends Fragment{
 
                 }
 
-
-
-                // when map is loaded
-//                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//                    @Override
-//                    public void onMapClick(LatLng latLng) {
-//                        // when clicked on map
-//                        // initialize marker
-//                        MarkerOptions markerOptions = new MarkerOptions();
-//                        // set position of marker
-//                        markerOptions.position(latLng);
-//                        // set title of marker
-//                        markerOptions.title(latLng.latitude+" : "+ latLng.longitude);
-//                        // remove all markers
-//                        googleMap.clear();
-//                        // Animating to zoom the marker
-//                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-//                        // add marker on map
-//                        googleMap.addMarker(markerOptions);
-//                    }
-//                });
             }
         });
         return view;
     }
-
 
 }

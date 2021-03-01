@@ -3,10 +3,7 @@ package org.me.gcu.equakestartercode;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -73,17 +70,26 @@ public class ParseXMLData {
                             }else if("title".equalsIgnoreCase(tagName)){
                                 currentRecord.setTitle(textValue);
                             }else if("description".equalsIgnoreCase(tagName)){
-                                currentRecord.setDescription(textValue);
-                            }else if("link".equalsIgnoreCase(tagName)){
+                                String[] descArr = textValue.split(";");
+                                //0: "Origin date/time: Mon, 01 Feb 2021 18:05:16 "
+                                //1: " Location: LLANVEYNOE,HEREF "
+                                //2: " Lat/long: 51.961,-3.043 "
+                                //3: " Depth: 13 km "
+                                //4: " Magnitude: 1.9"
+                                String dateTime = descArr[0].split(":")[1];
+                                String location = descArr[1].split(":")[1];
+                                double latitude = Double.parseDouble(descArr[2].split(":")[1].split(",")[0]);
+                                double longitude = Double.parseDouble(descArr[2].split(":")[1].split(",")[1]);
+                                // replace everything except numbers and decimal point
+                                double depth = Double.parseDouble(descArr[3].replaceAll("[^0-9.-]", ""));
+                                double magnitude = Double.parseDouble(descArr[4].split(":")[1]);
+                                Description newDescription = new Description(dateTime, location, latitude, longitude, depth, magnitude);
+                                currentRecord.setDescription(newDescription);
+                            } else if("link".equalsIgnoreCase(tagName)){
                                 currentRecord.setLink(textValue);
-                            }else if("pubDate".equalsIgnoreCase(tagName)){
-                                currentRecord.setPubDate(textValue);
-                            }else if("category".equalsIgnoreCase(tagName)){
+                            }
+                            else if("category".equalsIgnoreCase(tagName)){
                                 currentRecord.setCategory(textValue);
-                            }else if("lat".equalsIgnoreCase(tagName)){
-                                currentRecord.setLatitude(textValue);
-                            }else if("long".equalsIgnoreCase(tagName)){
-                                currentRecord.setLongitude(textValue);
                             }
                         }
                         break;
@@ -91,11 +97,6 @@ public class ParseXMLData {
                 }
                 eventType = xpp.next();
             }
-            // traverse the list and see if it is actually worked
-//            for (Item entry : items){
-//                Log.d(TAG, "parse: ***************************");
-//                Log.d(TAG, entry.toString());
-//            }
         }catch (Exception e){
             status = false;
             Log.e(TAG, "parseXML: Error whiling parsing xml data");

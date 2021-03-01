@@ -1,5 +1,6 @@
 package org.me.gcu.equakestartercode;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +43,8 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
     private TextView max_depth;
     private TextView min_depth;
 
-
+    private LocalData localData;
+    private String SAVED_RESULT="saved_result";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +71,6 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         min_magnitude = (TextView) findViewById(R.id.min_magnitude);
         max_depth = (TextView) findViewById(R.id.max_depth);
         min_depth = (TextView) findViewById(R.id.min_depth);
-
-        setData(this.items);
     }
     @SuppressLint("ClickableViewAccessibility")
     private void showCalendar(EditText editText){
@@ -180,7 +181,7 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
 
 
         for(Item feed : items){
-            String feedDate = feed.getDescription().split(";")[0].split(":")[1].trim();
+            String feedDate = feed.getDescription().getDateTime().trim();
             // Get the two dates to be compared
             try{
                 Date date_From = simpleDateFormat1.parse(dateFrom);
@@ -211,11 +212,11 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         temp[3] = 100;// starting as min
 
         for(Item feed : items){
-            double magnitude = Double.parseDouble(feed.getDescription().split(";")[4].split(":")[1]);
+            double magnitude = feed.getDescription().getMagnitude();
             if(temp[0]<magnitude) temp[0] = magnitude;// max
             if(temp[1]>magnitude) temp[1] = magnitude;// min
 
-            double depth = Double.parseDouble(feed.getDescription().split(";")[3].split(":")[1].trim().substring(0,1));
+            double depth = feed.getDescription().getDepth();
             if(temp[2]<depth) temp[2] = depth;
             if(temp[3]>depth) temp[3] = depth;
         }
@@ -238,11 +239,9 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         double mostNegativeLongitude = 100.0;// furthest west
 
         for(Item feed : items){
-            String latLong = feed.getDescription().split(";")[2].split(":")[1];
-            String location = feed.getDescription().split(";")[1].split(":")[1];
-            double latitude = Double.parseDouble(latLong.split(",")[0].trim());
-            double longitude = Double.parseDouble(latLong.split(",")[1].trim());
-            //
+            String location = feed.getDescription().getLocation();
+            double latitude = feed.getDescription().getLatitude();
+            double longitude = feed.getDescription().getLongitude();
 
             if(mostPositiveLatitude < latitude){
                 //Furthest north
@@ -276,5 +275,132 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         temp[3] = furthestEast;
 
         return temp;
+    }
+    private void restoreDate(){
+        this.max_magnitude.setText(localData.getMax_magnitude());
+        this.min_magnitude.setText(localData.getMin_magnitude());
+        this.max_depth.setText(localData.getMax_depth());
+        this.min_depth.setText(localData.getMin_depth());
+
+        this.furthest_north.setText(localData.getFurthest_north());
+        this.furthest_south.setText(localData.getFurthest_south());
+        this.furthest_west.setText(localData.getFurthest_west());
+        this.furthest_east.setText(localData.getFurthest_east());
+    }
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.localData = (LocalData)savedInstanceState.getSerializable(SAVED_RESULT);
+        restoreDate();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        localData = new LocalData(furthest_north.getText().toString(),
+                furthest_south.getText().toString(),
+                furthest_west.getText().toString(),
+                furthest_east.getText().toString(),
+                max_magnitude.getText().toString(),
+                min_magnitude.getText().toString(),
+                max_depth.getText().toString(),
+                min_depth.getText().toString());
+        outState.putSerializable(SAVED_RESULT, localData);
+        super.onSaveInstanceState(outState);
+    }
+
+    private static class LocalData implements Serializable{
+        private String furthest_north;
+        private String furthest_south;
+        private String furthest_west;
+        private String furthest_east;
+
+        private String max_magnitude;
+        private String min_magnitude;
+        private String max_depth;
+        private String min_depth;
+
+        public String getFurthest_north() {
+            return furthest_north;
+        }
+
+        public void setFurthest_north(String furthest_north) {
+            this.furthest_north = furthest_north;
+        }
+
+        public String getFurthest_south() {
+            return furthest_south;
+        }
+
+        public void setFurthest_south(String furthest_south) {
+            this.furthest_south = furthest_south;
+        }
+
+        public String getFurthest_west() {
+            return furthest_west;
+        }
+
+        public void setFurthest_west(String furthest_west) {
+            this.furthest_west = furthest_west;
+        }
+
+        public String getFurthest_east() {
+            return furthest_east;
+        }
+
+        public void setFurthest_east(String furthest_east) {
+            this.furthest_east = furthest_east;
+        }
+
+        public String getMax_magnitude() {
+            return max_magnitude;
+        }
+
+        public void setMax_magnitude(String max_magnitude) {
+            this.max_magnitude = max_magnitude;
+        }
+
+        public String getMin_magnitude() {
+            return min_magnitude;
+        }
+
+        public void setMin_magnitude(String min_magnitude) {
+            this.min_magnitude = min_magnitude;
+        }
+
+        public String getMax_depth() {
+            return max_depth;
+        }
+
+        public void setMax_depth(String max_depth) {
+            this.max_depth = max_depth;
+        }
+
+        public String getMin_depth() {
+            return min_depth;
+        }
+
+        public void setMin_depth(String min_depth) {
+            this.min_depth = min_depth;
+        }
+
+        public LocalData(String furthest_north,
+                         String furthest_south,
+                         String furthest_west,
+                         String furthest_east,
+                         String max_magnitude,
+                         String min_magnitude,
+                         String max_depth,
+                         String min_depth) {
+            this.furthest_north = furthest_north;
+            this.furthest_south = furthest_south;
+            this.furthest_west = furthest_west;
+            this.furthest_east = furthest_east;
+            this.max_magnitude = max_magnitude;
+            this.min_magnitude = min_magnitude;
+            this.max_depth = max_depth;
+            this.min_depth = min_depth;
+
+
+        }
     }
 }

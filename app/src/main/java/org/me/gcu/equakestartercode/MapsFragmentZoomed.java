@@ -2,6 +2,7 @@ package org.me.gcu.equakestartercode;
 
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +16,19 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-
 public class MapsFragmentZoomed extends Fragment {
 
     private GoogleMap mMap;
-    private LatLng latLng;
-    private String location;
-    private double magnitude;
-    public MapsFragmentZoomed(LatLng latLng, String location, double magnitude){
-        this.latLng = latLng;
-        this.location = location;
-        this.magnitude = magnitude;
+    private static LatLng latLng;
+    private static String location;
+    private static double magnitude;
+    @SuppressLint("ValidFragment")
+    public MapsFragmentZoomed(){ };
+
+    public MapsFragmentZoomed(double latitude, double longitude, String location, double magnitude){
+        MapsFragmentZoomed.location = location;
+        MapsFragmentZoomed.magnitude = magnitude;
+        MapsFragmentZoomed.latLng = new LatLng(latitude, longitude);
     }
 
     @Override
@@ -39,6 +42,7 @@ public class MapsFragmentZoomed extends Fragment {
                 .findFragmentById(R.id.zoomed_google_map);
 
         // Async map
+        assert supportMapFragment != null;
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
