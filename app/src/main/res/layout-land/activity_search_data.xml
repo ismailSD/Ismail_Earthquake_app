@@ -12,11 +12,13 @@
         android:orientation="vertical">
 
         <TextView
+            android:text="@string/search_guide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/search_guide"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@android:color/holo_blue_dark"
+            android:padding="10dp"/>
 
         <GridLayout
             android:layout_width="fill_parent"
@@ -48,8 +50,9 @@
                         android:layout_column="0"
                         android:layout_columnWeight="1"
                         android:text="Date From:"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/teal_700"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -59,8 +62,9 @@
                         android:layout_column="1"
                         android:layout_columnWeight="1"
                         android:text="Date To:"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/teal_700"/>
 
                     <!--row 1-->
                     <EditText
@@ -124,7 +128,8 @@
                     android:layout_columnWeight="1"
                     android:text="Furthest North:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/furthest_north"
@@ -146,7 +151,8 @@
                     android:layout_columnWeight="1"
                     android:text="Furthest South:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/furthest_south"
@@ -168,7 +174,8 @@
                     android:layout_columnWeight="1"
                     android:text="Furthest West:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/furthest_west"
@@ -190,7 +197,8 @@
                     android:layout_columnWeight="1"
                     android:text="Furthest East:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/furthest_east"
@@ -221,7 +229,8 @@
                     android:layout_columnWeight="1"
                     android:text="Max magnitude:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/max_magnitude"
@@ -243,7 +252,8 @@
                     android:layout_columnWeight="1"
                     android:text="Min Magnitude:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/min_magnitude"
@@ -265,7 +275,8 @@
                     android:layout_columnWeight="1"
                     android:text="Max depth:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/max_depth"
@@ -287,7 +298,8 @@
                     android:layout_columnWeight="1"
                     android:text="Min Depth:"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="@color/teal_700"/>
 
                 <TextView
                     android:id="@+id/min_depth"

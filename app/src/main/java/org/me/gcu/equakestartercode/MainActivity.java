@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity{
     private ItemAdapter feedAdapter;
     private static final int initialDelay = 0;
     private static final int schedulePeriod = 15;// seconds
+
     private final ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(3);
     private Future<?> future;
     map_fragment map_fragment;
@@ -206,7 +206,13 @@ public class MainActivity extends AppCompatActivity{
             if(rssFeed==null){
                 Log.e(TAG, "doInBackground: Error downloading");
             }
+
             return rssFeed;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
         }
 
         @Override

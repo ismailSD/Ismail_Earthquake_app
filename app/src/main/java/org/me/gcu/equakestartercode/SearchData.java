@@ -10,13 +10,18 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -83,15 +88,37 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
                 updateLabel(editText);
             }
         };
-
         editText.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event){
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    new DatePickerDialog(SearchData.this, date,
+                    DatePickerDialog dDialog = new DatePickerDialog(SearchData.this, date,
                             myCalendar.get(Calendar.YEAR),
                             myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                            myCalendar.get(Calendar.DAY_OF_MONTH));
+
+                    long now = System.currentTimeMillis();
+                    Calendar fiftyDaysAgo = (Calendar) Calendar.getInstance();
+                    fiftyDaysAgo.setTimeInMillis(now);
+
+                    // allow the user to select from the last fifty days only
+                    fiftyDaysAgo.add(Calendar.DATE, -50);
+
+                    // set the maximum date the user can select to the current date
+                    dDialog.getDatePicker().setMaxDate(now);
+
+                    if(editText == date_to){
+
+                        if(date_from.getText().toString().isEmpty()){
+                            displayError("Please select From date first!");
+                        }else {
+                            dDialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis());
+                            dDialog.show();
+                        }
+                    }else {
+                        dDialog.getDatePicker().setMinDate(fiftyDaysAgo.getTimeInMillis());
+                        dDialog.show();
+                    }
                 }
                 return true;
             }
@@ -103,7 +130,6 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
         editText.setText(sdf.format(myCalendar.getTime()));
     }
-
 
 
     // allows us to navigate back to previous activity
@@ -121,6 +147,11 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
             String startDate = date_from.getText().toString();
             String endDate = date_to.getText().toString();
 
+            if(date_from.getText().toString().isEmpty() || date_to.getText().toString().isEmpty()){
+                displayError("Please select date ranges first!");
+                return;
+            }
+
             try {
                 // Create SimpleDateFormat object
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -129,18 +160,22 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
                 Date date_from = simpleDateFormat.parse(startDate);
                 Date date_to = simpleDateFormat.parse(endDate);
 
-                // Compare the dates using compareTo()
+                // Compare the dates
                 if (date_from.compareTo(date_to) > 0) {
-                    // When Date date_from > Date date_to display invalid date selection message
-                    System.out.println("Date_from is greater than Date_to!!");
-                }else {
-                    // get information based on selected data.................
-                    //System.out.println(":::::::::::::Item from first of feburary to 26 feburary::::::::::::::::");
-                    ArrayList<Item> selectedData = selectedData(this.items, startDate, endDate);
-                    //for (Item feed : selectedData) System.out.println(feed.getDescription().split(";")[0].split(":")[1].trim());
-                    //System.out.println(":::::::::::::Item from first of feburary to 26 feburary::::::::::::::::");
 
-                    setData(selectedData);
+                    // When Date date_from > Date date_to display invalid date selection error
+                    displayError("Date from should not be greater than date to!");
+                }else {
+
+                    // get information within the selected dates.................
+                    ArrayList<Item> selectedData = selectedData(this.items, startDate, endDate);
+                    if(selectedData.size()<=0){
+                        // no date found within the selected dates
+                        displayError("No information found within the selected date range!");
+
+                    }else {
+                        setData(selectedData);
+                    }
                 }
 
             }catch (Exception e){
@@ -402,5 +437,17 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
 
 
         }
+    }
+    public void displayError(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
+        TextView tv = (TextView) layout.findViewById(R.id.txtvw);
+        tv.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL | Gravity.START, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }

@@ -19,8 +19,9 @@
             android:useDefaultMargins="true">
             <TextView
                 android:text="LOCATION:"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
+                android:textColor="@color/teal_700"
                 android:gravity="start"
                 android:layout_row="0"
                 android:layout_column="0"
@@ -40,8 +41,9 @@
             <!--row 1-->
             <TextView
                 android:text="Date:"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
+                android:textColor="@color/teal_700"
                 android:gravity="start"
                 android:layout_row="1"
                 android:layout_column="0"
@@ -61,8 +63,9 @@
             <!--row 2-->
             <TextView
                 android:text="Latitude:"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
+                android:textColor="@color/teal_700"
                 android:gravity="start"
                 android:layout_row="2"
                 android:layout_column="0"
@@ -82,8 +85,9 @@
             <!--row 3-->
             <TextView
                 android:text="Longitude:"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
+                android:textColor="@color/teal_700"
                 android:gravity="start"
                 android:layout_row="3"
                 android:layout_column="0"
@@ -103,8 +107,9 @@
             <!--row 4-->
             <TextView
                 android:text="Magnitude:"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
+                android:textColor="@color/teal_700"
                 android:gravity="start"
                 android:layout_row="4"
                 android:layout_column="0"
@@ -124,8 +129,9 @@
             <!--row 5-->
             <TextView
                 android:text="Depth:"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
+                android:textColor="@color/teal_700"
                 android:gravity="start"
                 android:layout_row="5"
                 android:layout_column="0"
