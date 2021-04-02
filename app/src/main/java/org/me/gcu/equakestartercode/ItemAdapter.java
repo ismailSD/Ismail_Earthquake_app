@@ -13,7 +13,8 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
     private static final String TAG = "FeedAdapter";
     private final int layoutResource;

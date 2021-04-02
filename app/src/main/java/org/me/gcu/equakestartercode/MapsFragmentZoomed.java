@@ -15,7 +15,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class MapsFragmentZoomed extends Fragment {
 
     private GoogleMap mMap;

@@ -1,4 +1,5 @@
-<!--  Ismail adam semester B earthquake data reader app  -->
+<!--Created by ismail adam on 25/03/2021
+Student ID: S1908016-->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

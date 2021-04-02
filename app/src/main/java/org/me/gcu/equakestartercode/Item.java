@@ -1,7 +1,8 @@
 package org.me.gcu.equakestartercode;
 
 import java.io.Serializable;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class Item implements Serializable {
     private String title;
     private Description description;

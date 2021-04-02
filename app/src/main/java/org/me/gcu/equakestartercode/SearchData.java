@@ -28,7 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class SearchData extends AppCompatActivity implements View.OnClickListener{
     final Calendar myCalendar = Calendar.getInstance();
@@ -434,8 +435,6 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
             this.min_magnitude = min_magnitude;
             this.max_depth = max_depth;
             this.min_depth = min_depth;
-
-
         }
     }
     public void displayError(String message){

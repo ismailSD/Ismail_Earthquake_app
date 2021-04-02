@@ -27,7 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
     private static final String FEED_DATA = "items";

@@ -6,7 +6,8 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.StringReader;
 import java.util.ArrayList;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class ParseXMLData {
 
     private static final String TAG = "ParseXMLData";

@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.Locale;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class MoreInfo extends AppCompatActivity {
     private TextView info_location;
     private TextView info_date;

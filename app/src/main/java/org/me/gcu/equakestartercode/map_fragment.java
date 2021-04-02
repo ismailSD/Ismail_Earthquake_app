@@ -17,9 +17,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
-
+/**Created by ismail adam on 25/03/2021
+ * Student ID: S1908016 */
 public class map_fragment extends Fragment{
     // creating array list for adding all our locations.
     private  static  List<Item> items;

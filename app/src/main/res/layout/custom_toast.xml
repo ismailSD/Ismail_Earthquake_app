@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Created by ismail adam on 25/03/2021
+Student ID: S1908016-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/custom_toast_layout"
     android:orientation="horizontal"
