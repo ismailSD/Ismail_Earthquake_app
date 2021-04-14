@@ -1,8 +1,5 @@
 package org.me.gcu.equakestartercode;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -14,6 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity{
     private ItemAdapter feedAdapter; // aggregation
     private static final int initialDelay = 0;// seconds
     private static final int schedulePeriod = 15;// seconds
-    private map_fragment map_fragment;// aggregation
+    private org.me.gcu.equakestartercode.map_fragment map_fragment;// aggregation
     public volatile boolean IS_scheduleTaskExecutor_RUNNING = false;
     private ScheduledFuture<?> future;
     private final ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(3);
@@ -152,11 +152,7 @@ public class MainActivity extends AppCompatActivity{
         Log.d(TAG, "onSaveInstanceState: in");
         // bundle contains the list of key value pairs
         // saving the current value into the bundle
-<<<<<<< HEAD
-         outState.putSerializable(FEED_DATA, (Serializable) feedAdapter.getItems());
-=======
         outState.putSerializable(FEED_DATA, (Serializable) feedAdapter.getItems());
->>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
         // super method will take care of saving process
         Log.e(TAG, "onSaveInstanceState: Service cancelled::::::::::::::");
         super.onSaveInstanceState(outState);
@@ -205,40 +201,6 @@ public class MainActivity extends AppCompatActivity{
             Log.d("On Config Change:","PORTRAIT");
             System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
         }
-<<<<<<< HEAD
-    }
-
-    private void startService(){
-        IS_scheduleTaskExecutor_RUNNING = true;
-        future = scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "in startService: starting AsyncTask");
-                         new DownloadData().execute(urlSource);
-                        Log.d(TAG, "in startService: done");
-                    }
-                });
-            }
-        }, REMAINING_DELAY > 0 ? REMAINING_DELAY : initialDelay, schedulePeriod, TimeUnit.SECONDS);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.app_menu, menu);
-        return true;// to tell android that we have inflated the menu
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.searchMenu){
-            Intent searchIntent = new Intent(getApplicationContext(), SearchData.class);
-            searchIntent.putExtra("items", (Serializable) feedAdapter.getItems());
-            startActivity(searchIntent);
-
-=======
     }
 
     private void startService(){
@@ -271,7 +233,6 @@ public class MainActivity extends AppCompatActivity{
             searchIntent.putExtra("items", (Serializable) feedAdapter.getItems());
             startActivity(searchIntent);
 
->>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
         }else if(id == R.id.exitAppMenu){
             // exit the application
             MainActivity.this.finish();

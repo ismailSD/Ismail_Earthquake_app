@@ -1,13 +1,12 @@
 package org.me.gcu.equakestartercode;
 
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +26,6 @@ public class map_fragment extends Fragment{
     private  static  List<Item> items;
     private GoogleMap mMap;
     public map_fragment(){}
-<<<<<<< HEAD
-    public void setItems(List<Item> items){
-        map_fragment.items = items;
-    }
-=======
->>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

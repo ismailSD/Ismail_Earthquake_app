@@ -1,9 +1,5 @@
 package org.me.gcu.equakestartercode;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -21,6 +17,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -356,11 +356,7 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
     }
 
     /** allows the storing of currently displayed earthquake's filtered data
-<<<<<<< HEAD
-     in a state so that when the device is rotated the data is not lost
-=======
         in a state so that when the device is rotated the data is not lost
->>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
      */
     private static class LocalData implements Serializable{
         private String furthest_north;

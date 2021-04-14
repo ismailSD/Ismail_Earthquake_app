@@ -1,19 +1,16 @@
 package org.me.gcu.equakestartercode;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Locale;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
-<<<<<<< HEAD
-=======
 
->>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
 /** this Activity class allows the displaying of more information about
  * specific earthquake*/
 public class MoreInfo extends AppCompatActivity {

@@ -42,10 +42,7 @@
         <activity android:name=".MainActivity"
             android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden">
-<<<<<<< HEAD
 
-=======
->>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
