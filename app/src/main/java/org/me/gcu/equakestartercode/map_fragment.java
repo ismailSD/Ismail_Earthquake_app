@@ -20,12 +20,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
+
+/**Map fragment class allows the displaying of the earthquake locations */
 public class map_fragment extends Fragment{
     // creating array list for adding all our locations.
     private  static  List<Item> items;
     private GoogleMap mMap;
     public map_fragment(){}
-    public map_fragment(List<Item> items){
+    public void setItems(List<Item> items){
         map_fragment.items = items;
     }
 

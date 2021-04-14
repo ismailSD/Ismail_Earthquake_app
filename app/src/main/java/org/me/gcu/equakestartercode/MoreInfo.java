@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.Locale;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
+/** this Activity class allows the displaying of more information about
+ * specific earthquake*/
 public class MoreInfo extends AppCompatActivity {
     private TextView info_location;
     private TextView info_date;

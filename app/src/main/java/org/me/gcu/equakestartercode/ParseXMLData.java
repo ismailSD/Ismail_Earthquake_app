@@ -39,17 +39,16 @@ public class ParseXMLData {
             while (eventType != XmlPullParser.END_DOCUMENT){
 
             // get the name of the current tag
-            // it is worth noting that getName method might return null if
+            // the getName method might return null if
             // the parser isn't inside a tag
             String tagName = xpp.getName();
 
-            // take action depending on the type of event inside the parser
-            // now, at some point it will read start of a tag in the xml and
-            // when that happens the event type will change to START_TAG, if that
-            // happens, we are only interested if it is an entry tag because we are
-            // only doing anything with the data in the individual entries, we are not
-            // touching any of the data that is not in the entry. we could modify
-            // and display the title of the feed.
+                // take action depending on the type of event inside the parser
+                // at some point it will read start of a tag in the xml and
+                // when that happens the event type will change to START_TAG, if that
+                // happens, we are only interested if it is an entry tag because we are
+                // only doing anything with the data in the individual entries, we are not
+                // touching any of the data that is not in the entry.
                 switch (eventType){
                     case XmlPullParser.START_TAG:
                     //Log.d(TAG, "parse: starting tag for "+ tagName);
