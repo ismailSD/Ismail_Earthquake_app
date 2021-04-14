@@ -29,6 +29,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
+
 public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
     private static final String FEED_DATA = "items";
@@ -170,8 +171,8 @@ public class MainActivity extends AppCompatActivity{
 
             ParseXMLData parseXMLData = new ParseXMLData();
             parseXMLData.parseXML(s);// s is the xml the android framework has sent at this point
-
             feedAdapter = new ItemAdapter(MainActivity.this, R.layout.list_record, parseXMLData.getApplications());
+
             ///::::::::::::::
             map_fragment = new map_fragment(feedAdapter.getItems());
             // Open fragment
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity{
             }catch (IllegalStateException e){
                 e.printStackTrace();
             }
+
 
             xmlListView.setAdapter(feedAdapter);
             feedAdapter.notifyDataSetChanged();

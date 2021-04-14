@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +29,9 @@ import java.util.Date;
 import java.util.Locale;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
+
+/** This Activity class allows the searching and displaying of specific
+ * earthquake filtered by date*/
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class SearchData extends AppCompatActivity implements View.OnClickListener{
     final Calendar myCalendar = Calendar.getInstance();
@@ -127,7 +129,7 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         });
     }
     private void updateLabel(EditText editText) {
-        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        String myFormat = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.UK);
         editText.setText(sdf.format(myCalendar.getTime()));
     }
@@ -144,6 +146,9 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View v) {
+        // check if the btn_search button is clicked
+        // if so, get the dates selected from the fields and validate
+        // if validation failed, display error message by using the displayError() method created.
         if(v==btn_search){
             String startDate = date_from.getText().toString();
             String endDate = date_to.getText().toString();
@@ -154,24 +159,22 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
             }
 
             try {
-                // Create SimpleDateFormat object
+                // Create SimpleDateFormat object.
+                // Get the two dates to be compared.
+                // Compare the dates, if date_from > Date date_to,
+                // then display invalid date selection error message
+                // otherwise get information within the selected dates
+                // if no information found within the selected dates then display
+                // "no date found within the selected dates" message
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-                // Get the two dates to be compared
                 Date date_from = simpleDateFormat.parse(startDate);
                 Date date_to = simpleDateFormat.parse(endDate);
 
-                // Compare the dates
                 if (date_from.compareTo(date_to) > 0) {
-
-                    // When Date date_from > Date date_to display invalid date selection error
                     displayError("Date from should not be greater than date to!");
                 }else {
-
-                    // get information within the selected dates.................
                     ArrayList<Item> selectedData = selectedData(this.items, startDate, endDate);
                     if(selectedData.size()<=0){
-                        // no date found within the selected dates
                         displayError("No information found within the selected date range!");
 
                     }else {
@@ -186,6 +189,7 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
     }
 
     private void setData(ArrayList<Item> items){
+        // assign the search results to their corresponding fields
         this.max_magnitude.setText("");
         this.min_magnitude.setText("");
         this.max_depth.setText("");
@@ -210,6 +214,8 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
     }
 
     private ArrayList<Item> selectedData(ArrayList<Item> items, String dateFrom, String dateTo){
+        // compare and select only the items within the specified dates
+
         ArrayList<Item> tempItems = new ArrayList<>();
 
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -226,7 +232,6 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
 
                 if (feed_date.compareTo(date_From) >= 0 && feed_date.compareTo(date_to) <=0) {
                     // When feed_date >= date_from  and <= date_to then add this item to the array list
-                    //System.out.println("feed_date is >= date_from");
                     tempItems.add(feed);
                 }
             }catch (Exception e){
@@ -237,6 +242,7 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         return tempItems;
     }
     private double[] getMaxMinData(ArrayList<Item> items){
+        // get the maximum, minimum magnitudes as well as depths
         // arr 0 = max magnitude
         // arr 1 = min magnitude
 
@@ -260,6 +266,8 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         return temp;
     }
     private String[] directions(ArrayList<Item> items){
+        // get most northerly, southerly, westerly and easterly
+        // earthquakes
         String furthestNorth = "";
         String furthestSouth = "";
 
@@ -313,6 +321,7 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         return temp;
     }
     private void restoreDate(){
+        // reassign the fields with the saved data
         this.max_magnitude.setText(localData.getMax_magnitude());
         this.min_magnitude.setText(localData.getMin_magnitude());
         this.max_depth.setText(localData.getMax_depth());
@@ -332,6 +341,8 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        // save the search results of earthquake data in SAVED_RESULT
+        // so that they can be restored from it when the device rotated
         localData = new LocalData(furthest_north.getText().toString(),
                 furthest_south.getText().toString(),
                 furthest_west.getText().toString(),
@@ -344,6 +355,9 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         super.onSaveInstanceState(outState);
     }
 
+    /** allows the storing of currently displayed earthquake's filtered data
+        in a state so that when the device is rotated the data is not lost
+     */
     private static class LocalData implements Serializable{
         private String furthest_north;
         private String furthest_south;
@@ -355,6 +369,23 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
         private String max_depth;
         private String min_depth;
 
+        public LocalData(String furthest_north,
+                         String furthest_south,
+                         String furthest_west,
+                         String furthest_east,
+                         String max_magnitude,
+                         String min_magnitude,
+                         String max_depth,
+                         String min_depth) {
+            this.furthest_north = furthest_north;
+            this.furthest_south = furthest_south;
+            this.furthest_west = furthest_west;
+            this.furthest_east = furthest_east;
+            this.max_magnitude = max_magnitude;
+            this.min_magnitude = min_magnitude;
+            this.max_depth = max_depth;
+            this.min_depth = min_depth;
+        }
         public String getFurthest_north() {
             return furthest_north;
         }
@@ -419,25 +450,11 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
             this.min_depth = min_depth;
         }
 
-        public LocalData(String furthest_north,
-                         String furthest_south,
-                         String furthest_west,
-                         String furthest_east,
-                         String max_magnitude,
-                         String min_magnitude,
-                         String max_depth,
-                         String min_depth) {
-            this.furthest_north = furthest_north;
-            this.furthest_south = furthest_south;
-            this.furthest_west = furthest_west;
-            this.furthest_east = furthest_east;
-            this.max_magnitude = max_magnitude;
-            this.min_magnitude = min_magnitude;
-            this.max_depth = max_depth;
-            this.min_depth = min_depth;
-        }
     }
+
+
     public void displayError(String message){
+        // display error message in a Toast widget
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.custom_toast_layout));
         TextView tv = (TextView) layout.findViewById(R.id.txtvw);

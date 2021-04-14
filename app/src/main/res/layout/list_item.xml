@@ -6,6 +6,5 @@ Student ID: S1908016-->
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textSize="18sp">
-    <!-- used to display each item in the list.
-        represent a single item in a list-->
+    <!-- used to display each item in the list. represent a single item in a list-->
 </TextView>

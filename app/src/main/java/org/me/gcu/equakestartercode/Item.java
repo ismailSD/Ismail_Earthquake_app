@@ -3,16 +3,21 @@ package org.me.gcu.equakestartercode;
 import java.io.Serializable;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
-public class Item implements Serializable {
+
+/**Item class helps in creating a new item record
+ * It will be used when reading the feeds*/
+public class Item implements Serializable{
     private String title;
     private Description description;
     private String link;
     private String category;
 
+    public Item(){ }
+
+    // getters and setters:::::::::::::::::::::::::::::::::::::::::::::::::::
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
