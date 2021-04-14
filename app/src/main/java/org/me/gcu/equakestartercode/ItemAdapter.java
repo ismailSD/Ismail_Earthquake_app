@@ -24,13 +24,12 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
     private static final String TAG = "FeedAdapter";
     private final int layoutResource;
     private final LayoutInflater layoutInflater;
-    private final ArrayList<Item> items;
+    private ArrayList<Item> items;
 
-    public ItemAdapter(Context context, int resource, ArrayList<Item> items){
+    public ItemAdapter(Context context, int resource){
         super(context, resource);
         this.layoutResource = resource;
         this.layoutInflater = LayoutInflater.from(context);
-        this.items = items;
     }
 
     @Override
@@ -134,5 +133,8 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
 
     public List<Item> getItems() {
         return items;
+    }
+    public void setItems(ArrayList<Item> items){
+        this.items = items;
     }
 }

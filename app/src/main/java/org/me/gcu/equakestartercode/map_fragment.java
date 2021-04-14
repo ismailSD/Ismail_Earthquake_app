@@ -27,9 +27,6 @@ public class map_fragment extends Fragment{
     private  static  List<Item> items;
     private GoogleMap mMap;
     public map_fragment(){}
-    public map_fragment(List<Item> items){
-        map_fragment.items = items;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,5 +86,7 @@ public class map_fragment extends Fragment{
         });
         return view;
     }
-
+    public void setItems(List<Item> items){
+        map_fragment.items = items;
+    }
 }

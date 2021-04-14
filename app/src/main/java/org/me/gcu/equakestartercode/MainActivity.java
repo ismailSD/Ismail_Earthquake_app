@@ -23,48 +23,201 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
 
+/**MainActivity class, the starting point of the application*/
 public class MainActivity extends AppCompatActivity{
     private static final String TAG = "MainActivity";
-    private static final String FEED_DATA = "items";
-    // create a reference to the listView widget from the activity main
+    private static final String FEED_DATA = "feedData";
+    private static ArrayList<Item> savedItems;
+    // Create a reference to the listView widget from the activity main
     private ListView xmlListView;
 
     private String urlSource="http://quakes.bgs.ac.uk/feeds/MhSeismology.xml";
-    private ItemAdapter feedAdapter;
-    private static final int initialDelay = 0;
+    private ItemAdapter feedAdapter; // aggregation
+    private static final int initialDelay = 0;// seconds
     private static final int schedulePeriod = 15;// seconds
-
+    private map_fragment map_fragment;// aggregation
+    public volatile boolean IS_scheduleTaskExecutor_RUNNING = false;
+    private ScheduledFuture<?> future;
     private final ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(3);
-    private Future<?> future;
-    map_fragment map_fragment;
+    private volatile long REMAINING_DELAY = 0;
+    /** onCreate method:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     * As the activity is launched for the first time, the onCreate() method is invoked.
+     * Since this is the first time the activity is launched, there is no saved state,
+     * so the bundle is null and nothing has to be restored.
+     *
+     * This method allows for the creation of the user interface as well as initializing
+     * of the data elements
+     * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(TAG, "onCreate: in::::::::::::::::::::::::::::::::::::");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         xmlListView = (ListView) findViewById(R.id.xmlListView);
-        startService();
+        Log.e(TAG, "onCreate: out:::::::::::::::::::::::::::::::::::");
+    }
+
+    /**onRestoreInstanceState method::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     * The onRestoreInstanceState(Bundle) method is not often invoked.
+     * In fact, it is called only when Bundle is not null.
+     * As a result, the first moment the app is launched,
+     * this method would not be called so there is nothing to restore “bundle is null,”
+     * so Android skips it.*/
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState: in");
+        super.onRestoreInstanceState(savedInstanceState);
+        savedItems = (ArrayList<Item>) savedInstanceState.getSerializable(FEED_DATA);
+        feedAdapter.setItems(savedItems);
+        map_fragment.setItems(savedItems);
+        Log.d(TAG, "onRestoreInstanceState: out");
+    }
+
+    /** onStart and onResume methods::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     * After the onCreate() method has been called, the following methods would be called:
+     * onStart() and onResume().
+     * The activity is visible after onStart() is called, but it might not be in a condition
+     * where the user could interact with it.
+     * The activity is in the foreground and running after onResume() has been called which means
+     * it is in front of all other activities, and the user will happily interact with it.*/
+    @Override
+    protected void onStart() {
+        Log.e(TAG, "onStart: in::::::::::::::::::::");
+        if(feedAdapter == null){
+            feedAdapter = new ItemAdapter(MainActivity.this, R.layout.list_record);
+        }else {
+            Log.e(TAG, "onStart: feedAdapter already initialized");
+        }
+        if (map_fragment == null){
+            map_fragment = new map_fragment();
+        }else {
+            Log.e(TAG, "onStart: map_fragment already initialized");
+        }
+        if(!IS_scheduleTaskExecutor_RUNNING){
+            startService();
+        }else {
+            Log.e(TAG, "onStart: schedule service is already running");
+        }
+        super.onStart();
+        Log.e(TAG, "onStart: out::::::::::::::::::::");
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: in::::::::::::::::::::::::::");
+        super.onResume();
+        Log.e(TAG, "onResume: out:::::::::::::::::::::::::");
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.e(TAG, "onRestart: in::::::::::::::::::::::::");
+        super.onRestart();
+        Log.e(TAG, "onRestart: out:::::::::::::::::::::::");
+    }
+
+
+    /**onPause and onSaveInstanceSate methods:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     * When the activity is running, another activity may be brought to the foreground,
+     * or the phone may sleep. If this occurs, the current activity is paused,
+     * and the onPause() method is invoked before the current activity loses control.
+     * The activity is still in a happy sate, and there is no need to save and restore state –
+     * it is just no longer in the foreground.
+     * So, if a dialog is displayed on top of the activity, the activity will then be paused,
+     * and onPause() will be invoked. When the user brings the activity to the foreground,
+     * for example, by dismissing a dialogue, onResume() is invoked. Since there is no saved state,
+     * onSaeInstanceState() is not called, and the Bundle passed to onCreate() is null.
+     * If, on the other hand, the activity is destroyed due to a configuration change or
+     * that Android requires its resources, Android "remembers" that it existed and was
+     * terminated by the system. So, if the configuration changes, the same thing occurs,
+     * but the activity is automatically restarted which means that the user doesn't need to
+     * lunch it again.
+     * */
+    @Override
+    protected void onPause() {
+        Log.e(TAG, "onPause: in:::::::::::::::::::::::::");
+        super.onPause();
+        Log.e(TAG, "onPause: out::::::::::::::::::::::::");
+    }
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: in");
+        // bundle contains the list of key value pairs
+        // saving the current value into the bundle
+        outState.putSerializable(FEED_DATA, (Serializable) feedAdapter.getItems());
+        // super method will take care of saving process
+        Log.e(TAG, "onSaveInstanceState: Service cancelled::::::::::::::");
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: out");
+    }
+
+    /** onDestroy() and onStop() method:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     * It should be noted that onDestroy() is not always called.
+     * onSaveInstanceState() and onRestoreInstance() are not always called either;
+     * they are called only when the system detects a need for them. As a consequence,
+     * Google Docs advises saving user data in onPause() rather than onSaveInstanceState().
+     */
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: in");
+        scheduleTaskExecutor.shutdown();// shout down the scheduler
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: out");
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e(TAG, "onStop: in");
+        try {
+            System.out.println("time remaining:::::::::::::::::::::::::::::::::::::::::");
+            REMAINING_DELAY = future.getDelay(TimeUnit.SECONDS);
+            System.out.println(REMAINING_DELAY);
+            System.out.println("time remaining:::::::::::::::::::::::::::::::::::::::::");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        future.cancel(true);// cancel the refresh schedule
+        IS_scheduleTaskExecutor_RUNNING = false;
+        super.onStop();
+        Log.e(TAG, "onStop: out");
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+            System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+            Log.d("On Config Change:","LANDSCAPE");
+        }else{
+
+            Log.d("On Config Change:","PORTRAIT");
+            System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+        }
     }
 
     private void startService(){
+        IS_scheduleTaskExecutor_RUNNING = true;
         future = scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-                public void run() {
-                    runOnUiThread(new Runnable(){
-                        @Override
-                        public void run() {
-                            Log.d(TAG, "in startService: starting AsyncTask");
-                            new DownloadData().execute(urlSource);
-                            Log.d(TAG, "in startService: done");
-                        }
-                    });
-                }
-            }, initialDelay,schedulePeriod,TimeUnit.SECONDS);
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "in startService: starting AsyncTask");
+                        new DownloadData().execute(urlSource);
+                        Log.d(TAG, "in startService: done");
+                    }
+                });
+            }
+        }, REMAINING_DELAY > 0 ? REMAINING_DELAY : initialDelay, schedulePeriod, TimeUnit.SECONDS);
     }
 
     @Override
@@ -88,78 +241,7 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onRestart() {
-        Log.d(TAG, "onRestart: in");
-        startService();// start background refresh
-        super.onRestart();
-        Log.d(TAG, "onRestart: out");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        Log.d(TAG, "onRestoreInstanceState: in");
-        super.onRestoreInstanceState(savedInstanceState);
-        // super method will retrieve the data from the saved instance then we can access it.
-        //this.items = (ArrayList<Item>) savedInstanceState.getSerializable(FEED_DATA);
-        Log.d(TAG, "onRestoreInstanceState: out");
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume: in");
-        super.onResume();
-        Log.d(TAG, "onResume: out");
-    }
-
-    @Override
-    protected void onPause() {
-        //onPause is called just before the activity moves to background and also before onSaveInstanceState.
-        Log.d(TAG, "onPause: in");
-        super.onPause();
-        future.cancel(true);// cancel the refresh schedule
-        Log.d(TAG, "onPause: out");
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState: in");
-        // bundle contains the list of key value pairs
-        // saving the current value into the bundle
-        //outState.putSerializable(FEED_DATA, (Serializable) feedAdapter.getItems());
-        // super method will take care of saving process
-        future.cancel(true);// cancel the refresh schedule
-        super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState: out");
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop: in");
-        future.cancel(true);// cancel the refresh schedule
-        super.onStop();
-        Log.d(TAG, "onStop: out");
-    }
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: in");
-        scheduleTaskExecutor.shutdown();// shout down the scheduler
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: out");
-    }
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-
-
     public class DownloadData extends AsyncTask<String, Void, String> {
-        //1 (String) the type of information will be a string (pass URL to the RSS feed)
-        //2 (Void) normally used if you want to display a progress bar
-        //  (we used Void as we don't need progress bar as our information is quiet small)
-        //3 (String) which contains all the XML data.
-
         private static final String TAG = "DownloadData";
         ProgressDialog progressDialog;
 
@@ -171,17 +253,16 @@ public class MainActivity extends AppCompatActivity{
 
             ParseXMLData parseXMLData = new ParseXMLData();
             parseXMLData.parseXML(s);// s is the xml the android framework has sent at this point
-            feedAdapter = new ItemAdapter(MainActivity.this, R.layout.list_record, parseXMLData.getApplications());
 
-            ///::::::::::::::
-            map_fragment = new map_fragment(feedAdapter.getItems());
+            /******/
+            feedAdapter.setItems(parseXMLData.getApplications());
+            map_fragment.setItems(feedAdapter.getItems());
             // Open fragment
             try{
                 getSupportFragmentManager().beginTransaction().replace(R.id.map_frame, map_fragment).commit();
             }catch (IllegalStateException e){
                 e.printStackTrace();
             }
-
 
             xmlListView.setAdapter(feedAdapter);
             feedAdapter.notifyDataSetChanged();
@@ -203,7 +284,7 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected String doInBackground(String... strings) {
-            // everything in here will run asynchronously
+            // Everything in here will run asynchronously
             Log.d(TAG, "doInBackground: starts with: "+ strings[0]);
             String rssFeed = downloadXML(strings[0]);
             if(rssFeed==null){
