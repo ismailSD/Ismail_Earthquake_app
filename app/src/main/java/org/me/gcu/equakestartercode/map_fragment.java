@@ -23,13 +23,16 @@ import java.util.List;
 
 /**Map fragment class allows the displaying of the earthquake locations */
 public class map_fragment extends Fragment{
-    // creating array list for adding all our locations.
+    // Creating array list for adding all of the locations.
     private  static  List<Item> items;
     private GoogleMap mMap;
     public map_fragment(){}
+<<<<<<< HEAD
     public void setItems(List<Item> items){
         map_fragment.items = items;
     }
+=======
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,14 +42,11 @@ public class map_fragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // initialize view
+        // initialize the view and the map fragment
         View view = inflater.inflate(R.layout.fragment_map_fragment, container, false);
-
-        // initialize map fragment
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.google_map);
 
-        // Async map
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -79,7 +79,7 @@ public class map_fragment extends Fragment{
                         // below line is use to add marker to each location of our array list.
                         mMap.addMarker(markerOptions);
 
-                        // below lin is use to zoom our camera on map.
+                        // below line is use to zoom our camera on map.
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(12.2f));
 
                         // below line is use to move our camera to the specific location.
@@ -92,5 +92,7 @@ public class map_fragment extends Fragment{
         });
         return view;
     }
-
+    public void setItems(List<Item> items){
+        map_fragment.items = items;
+    }
 }

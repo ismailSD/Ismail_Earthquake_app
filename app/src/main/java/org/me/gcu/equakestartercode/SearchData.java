@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.Locale;
 /**Created by ismail adam on 25/03/2021
  * Student ID: S1908016 */
+
+/** This Activity class allows the searching and displaying of specific
+ * earthquake filtered by date*/
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class SearchData extends AppCompatActivity implements View.OnClickListener{
     final Calendar myCalendar = Calendar.getInstance();
@@ -353,7 +356,11 @@ public class SearchData extends AppCompatActivity implements View.OnClickListene
     }
 
     /** allows the storing of currently displayed earthquake's filtered data
+<<<<<<< HEAD
      in a state so that when the device is rotated the data is not lost
+=======
+        in a state so that when the device is rotated the data is not lost
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
      */
     private static class LocalData implements Serializable{
         private String furthest_north;

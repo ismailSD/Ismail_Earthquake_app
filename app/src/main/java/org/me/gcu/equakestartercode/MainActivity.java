@@ -152,7 +152,11 @@ public class MainActivity extends AppCompatActivity{
         Log.d(TAG, "onSaveInstanceState: in");
         // bundle contains the list of key value pairs
         // saving the current value into the bundle
+<<<<<<< HEAD
          outState.putSerializable(FEED_DATA, (Serializable) feedAdapter.getItems());
+=======
+        outState.putSerializable(FEED_DATA, (Serializable) feedAdapter.getItems());
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
         // super method will take care of saving process
         Log.e(TAG, "onSaveInstanceState: Service cancelled::::::::::::::");
         super.onSaveInstanceState(outState);
@@ -201,6 +205,7 @@ public class MainActivity extends AppCompatActivity{
             Log.d("On Config Change:","PORTRAIT");
             System.out.println("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
         }
+<<<<<<< HEAD
     }
 
     private void startService(){
@@ -233,6 +238,40 @@ public class MainActivity extends AppCompatActivity{
             searchIntent.putExtra("items", (Serializable) feedAdapter.getItems());
             startActivity(searchIntent);
 
+=======
+    }
+
+    private void startService(){
+        IS_scheduleTaskExecutor_RUNNING = true;
+        future = scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "in startService: starting AsyncTask");
+                        new DownloadData().execute(urlSource);
+                        Log.d(TAG, "in startService: done");
+                    }
+                });
+            }
+        }, REMAINING_DELAY > 0 ? REMAINING_DELAY : initialDelay, schedulePeriod, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.app_menu, menu);
+        return true;// to tell android that we have inflated the menu
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.searchMenu){
+            Intent searchIntent = new Intent(getApplicationContext(), SearchData.class);
+            searchIntent.putExtra("items", (Serializable) feedAdapter.getItems());
+            startActivity(searchIntent);
+
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
         }else if(id == R.id.exitAppMenu){
             // exit the application
             MainActivity.this.finish();

@@ -1,5 +1,4 @@
 package org.me.gcu.equakestartercode;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,13 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 /**Created by ismail adam on 25/03/2021
+<<<<<<< HEAD
   * Student ID: S1908016 */
+=======
+ * Student ID: S1908016 */
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
 
 /** Custom array adapter, allows the displaying of multiple items in a single ListItem.
  * the list_item.xml created will be used to display the
  * earthquake's strength and location in a single listItem (list_item.xml).
  */
+<<<<<<< HEAD
 public class ItemAdapter extends ArrayAdapter implements View.OnClickListener, Serializable {
+=======
+public class ItemAdapter extends ArrayAdapter implements View.OnClickListener{
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
     // Set the fields to final so that they don't get accidentally changed later
     private static final String TAG = "FeedAdapter";
     private final int layoutResource;
@@ -71,7 +78,11 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener, S
         return items.size();
     }
 
+<<<<<<< HEAD
     // This method is automatically called by the ListView each time another item
+=======
+    // this method is automatically called by the ListView each time another item
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
     // is needs to be displayed
     @NonNull
     @Override
@@ -141,4 +152,8 @@ public class ItemAdapter extends ArrayAdapter implements View.OnClickListener, S
     public void setItems(ArrayList<Item> items){
         this.items = items;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452

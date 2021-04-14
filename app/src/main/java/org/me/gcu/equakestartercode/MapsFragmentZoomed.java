@@ -38,14 +38,12 @@ public class MapsFragmentZoomed extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // initialize view
+        // initialize the view and the map fragment
         View view = inflater.inflate(R.layout.fragment_maps_zoomed, container, false);
 
-        // initialize map fragment
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.zoomed_google_map);
 
-        // Async map
         assert supportMapFragment != null;
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -69,7 +67,7 @@ public class MapsFragmentZoomed extends Fragment {
                 // below line is use to add marker to each location of our array list.
                 mMap.addMarker(markerOptions);
 
-                // below lin is use to zoom our camera on map.
+                // below line is use to zoom our camera on map.
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(12.2f));
 
                 // below line is use to move our camera to the specific location.

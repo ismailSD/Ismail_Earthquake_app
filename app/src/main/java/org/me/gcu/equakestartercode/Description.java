@@ -5,11 +5,19 @@ import java.io.Serializable;
  * Student ID: S1908016 */
 
 /** This class implements Serializable Java interface
+<<<<<<< HEAD
  to allow the state of this class's object to be converted to
  a byte stream so that it can be reverted back into a copy of the object.
  By doing this it will help in transferring the object of this
  class to another android Activity as serializable item then convert back
  to its type (Description) object.
+=======
+    to allow the state of this class's object to be converted to
+    a byte stream so that it can be reverted back into a copy of the object.
+    By doing this it will help in transferring the object of this
+    class to another android Activity as serializable item then convert back
+    to its type (Description) object.
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
  */
 
 public class Description implements Serializable {
@@ -38,7 +46,10 @@ public class Description implements Serializable {
 
     // getters and setters to enable the retrieving and setting
     // of description details
+<<<<<<< HEAD
 
+=======
+>>>>>>> aeeb3a9aaf837857fafb0b71e2a812b136b9e452
     public String getLocation() {
         return location;
     }
